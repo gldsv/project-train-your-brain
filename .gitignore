@@ -1,5 +1,4 @@
 notebooks/*
-raw_data/*
 .DS_Store
 .env
 .envrc

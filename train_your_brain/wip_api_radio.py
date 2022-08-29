@@ -1,6 +1,14 @@
+"""
+todo
+- OOP the code
+- save to cloud
+"""
+
 import requests
 import pandas as pd
+from datetime import datetime
 import os
+
 
 BASE_URL = "https://openapi.radiofrance.fr/v1/graphql"
 API_TOKEN = os.environ.get("API_TOKEN")
@@ -77,10 +85,19 @@ diffusions_list = [
 diffusions_df = pd.DataFrame(diffusions_list)
 diffusions_df["date"] = pd.to_datetime(diffusions_df["date"], unit = "s").dt.strftime("%Y%m%d")
 
-header = diffusions_df.columns
+# Append to history csv if not already appended
 
-filename = os.path.join(os.environ.get("LOCAL_DATA_PATH"),
-        "daily_diffusions")
+dir = './raw_data'
+filename = 'podcast_history.csv'
+filepath = os.path.join(dir, filename)
 
-diffusions_df.to_csv(filename+".csv", index = False, mode = "a", header = False)
-diffusions_df
+history_df = pd.read_csv(filepath)
+
+today = datetime.today().strftime("%Y%m%d") # Get supposed last diffusion date
+today = int(today)
+
+if today in history_df["date"].values:
+    print(f"🟧 Last diffusion of {today} already in history file")
+else:
+    diffusions_df.to_csv(filepath, index = False, mode = "a", header = False)
+    print(f"🟩 Last diffusion of {today} added to history file")
