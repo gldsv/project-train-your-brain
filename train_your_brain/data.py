@@ -37,7 +37,7 @@ def get_show_url(show_id):
     return show_url
 
 
-def get_previous_diffusions(show_url, number_diffusions):
+def get_last_diffusions(show_url, number_diffusions):
     """Retrieve MP3 URLs for given number of last diffusions and given show by show URL"""
 
     query = """
@@ -102,7 +102,7 @@ def save_diffusion_to_history(diffusions_df, history_path):
     today = int(today)
 
     if today in history_df["date"].values:
-        print(f"🟧 Last diffusion of {today} already in history file")
+        print(f"🟩 Last diffusion of {today} already in history file")
     else:
         diffusions_df.to_csv(history_path, index = False, mode = "a", header = False)
         print(f"🟩 Last diffusion of {today} added to history file")
