@@ -4,3 +4,4 @@ notebooks/*
 .env
 .envrc
 *__pycache__*
+export/*
