@@ -3,3 +3,6 @@ raw_data/*
 .DS_Store
 .env
 .envrc
+.ipynb_checkpoints/
+.python-version
+
