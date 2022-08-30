@@ -1,0 +1,15 @@
+import pandas as pd
+from train_your_brain.preprop_audio import Audio
+
+data = pd.read_csv("../project-train-your-brain/raw_data/podcast_history.csv")
+data = data.reset_index()
+
+for index, row in data.iterrows():
+    date = str(row['date'])
+    url = str(row['url'])
+    audio = Audio(date = date, url= url)
+    audio.export_conversion()
+
+if  __name__ == '__main__':
+    print(data)
+    print(audio)
