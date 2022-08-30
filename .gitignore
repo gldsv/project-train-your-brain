@@ -1,0 +1,7 @@
+notebooks/*
+!notebooks/.keep
+.DS_Store
+.env
+.envrc
+*__pycache__*
+export/*
