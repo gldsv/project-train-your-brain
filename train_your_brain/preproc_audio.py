@@ -30,23 +30,23 @@ class Audio:
         self.audio = self.audio.set_frame_rate(16000)
 
         self.audio = self.audio[180000:]
+        # self.audio = self.audio[:60000] # Test for dev
 
         return self.audio
 
 
-    def export_conversion(self):
+    def export_conversion(self, storage_dir):
         """Export a .wav sample from audio-source.
         Samples are kept in self.samples list.
         Inputs are in seconds.
         """
 
         # Create samples folder if doesn't exist
-        sample_folder_path = os.path.join(os.path.dirname(self.filename), 'raw_data')
-        os.makedirs(sample_folder_path, exist_ok=True)
+        storage_dir = storage_dir
 
         # Create output filepath
         output_filename = f'{os.path.splitext(os.path.basename(self.filename))[0]}.wav'
-        output_path = os.path.join(sample_folder_path, output_filename)
+        output_path = os.path.join(storage_dir, output_filename)
 
         # Cancel if file already exists
         if os.path.exists(output_path):
