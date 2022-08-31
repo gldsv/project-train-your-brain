@@ -1,14 +1,6 @@
-"""
-todo
-- Classes
-- save to cloud
-"""
-
 import requests
 import pandas as pd
-from datetime import datetime
-import os
-
+import re
 
 class GetData:
     """A class to retrieve data using Radio France API"""
@@ -92,8 +84,21 @@ class GetData:
         return diffusions_df
 
 
+    def get_last_diffusion_url(self, diffusions_df):
+        """Get URL from last diffusion"""
+
+        pd.set_option('display.max_colwidth', None)
+        regex = "(.+)\?"
+        url = diffusions_df["url"].to_string(index=False)
+        url = re.findall(regex, url, flags=re.IGNORECASE)
+        url = url[0]
+
+        return url
+
+
     def read_diffusion_history(self, history_path):
         """Read CSV containing history of diffusions"""
+
         history_df = pd.read_csv(history_path)
 
         return history_df

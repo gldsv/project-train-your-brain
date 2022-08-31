@@ -5,3 +5,5 @@ notebooks/*
 .envrc
 *__pycache__*
 export/*
+raw_data/*
+!raw_data/podcast_history.json
