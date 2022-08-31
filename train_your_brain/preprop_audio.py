@@ -41,7 +41,7 @@ class Audio:
         """
 
         # Create samples folder if doesn't exist
-        sample_folder_path = os.path.join(os.path.dirname(self.filename), 'export')
+        sample_folder_path = os.path.join(os.path.dirname(self.filename), 'raw_data')
         os.makedirs(sample_folder_path, exist_ok=True)
 
         # Create output filepath
@@ -60,6 +60,7 @@ class Audio:
         # Generate output file
         try:
             self.audio.export(output_path, format='wav')
+            os.remove(self.filename)
             print(f'{os.path.basename(output_path)}: File created')
             print('Sampling Succeeded')
         except Exception as e:
