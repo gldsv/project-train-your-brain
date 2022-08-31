@@ -2,7 +2,6 @@ from train_your_brain.data import GetData
 from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
 import os
-import pandas as pd
 
 API_TOKEN = os.environ.get("API_TOKEN")
 AZURE_TOKEN = os.environ.get("AZURE_TOKEN")
