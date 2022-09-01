@@ -16,7 +16,7 @@ class LabelledData:
 
         #get list of all json in folder
         path_to_json =  self.source_url
-        json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
+        json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json') & pos_json.startswith('from') ]
 
         #load all json and store json data in a list
         all_data_json = []
@@ -93,3 +93,21 @@ class LabelledData:
 
 
         return labels_text
+
+    def preprocessed_label_to_json(self) :
+        """Export pd.DataFrame into json format"""
+        url =  self.source_url
+
+        #Retrieve pd.DataFrame from extract_labels_from_json() function
+        df = self.extract_labels_from_json()
+        date_start = df['episode'].min()
+        date_end = df['episode'].max()
+
+        #Extart pd.DataFrame to JSON
+        df.to_json(f'{url}/label_preprocessed_export_from_{date_start}_to_{date_end}.json',force_ascii=False,orient='records')
+
+# To call function
+#url = '/Users/claire/code/gldsv/project-train-your-brain/exchange'
+#labelled = LabelledData(url)
+#output = labelled.extract_labels_from_json() #Get Dataframe
+#
