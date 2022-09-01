@@ -31,6 +31,7 @@ class Audio:
 
         self.audio = self.audio[180000:]
         # self.audio = self.audio[:60000] # Test for dev
+        # self.audio = self.audio[240000:300000] # Test for dev
 
         return self.audio
 
