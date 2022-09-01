@@ -1,5 +1,5 @@
 import pandas as pd
-from train_your_brain.preprop_audio import Audio
+from train_your_brain.preproc_audio import Audio
 
 data = pd.read_csv("../project-train-your-brain/raw_data/podcast_history.csv")
 data = data.reset_index()
