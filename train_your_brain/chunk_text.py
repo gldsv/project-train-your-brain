@@ -15,7 +15,7 @@ class Chunk:
         """Chunk text by question blocs with regex rules"""
         indexes = [0]
         result = []
-        for match in re.finditer(self.regex, self.text):
+        for match in re.finditer(self.regex, self.text, flags=re.IGNORECASE):
             indexes.append(match.start())
             for i in range(1,len(indexes)) :
                 start = indexes[i-1]
