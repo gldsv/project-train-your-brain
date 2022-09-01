@@ -50,8 +50,6 @@ def transcript_audio(AZURE_TOKEN, last_diffusion_date, audio_path):
 
     return transcript_path
 
-    # remove wav file
-
 
 @task
 def chunk_transcript(last_diffusion_date, transcript_path):
@@ -63,11 +61,12 @@ def chunk_transcript(last_diffusion_date, transcript_path):
         text = text[0]
 
     chunker = Chunk(text, last_diffusion_date)
-    chunked_text = chunker.chunk_text()
+    chunked_text_df = chunker.chunk_text()
+    chunked_text_dict = chunker.chunk_dict()
 
     print(f"✅ Text chunked for episode for {last_diffusion_date}")
 
-    return chunked_text
+    return chunked_text_df, chunked_text_dict
 
 
 @flow
