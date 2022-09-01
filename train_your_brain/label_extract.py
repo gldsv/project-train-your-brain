@@ -58,7 +58,7 @@ class LabelledData:
                 if first_label_start!= 0:
                     start = 0
                     end = first_label_start -1
-                    labels_text.append(['Episode Start', '-','-','-',data_id])
+                    labels_text.append(['Episode Start', '','','',data_id])
                     labels_text.append(['Blabla', raw_text[start:end],start,end,data_id])
                     n = first_label_start
                 else :
@@ -85,11 +85,11 @@ class LabelledData:
                     start = data_label[-1]['end'] + 1
                     end = len(raw_text)
                     labels_text.append(['Blabla', raw_text[start:end],start,end,data_id])
-                    labels_text.append(['Episode End', '-','-','-',data_id])
+                    labels_text.append(['Episode End', '','','',data_id])
 
 
         #Transform list in DataFrame
-        labels_text = pd.DataFrame(labels_text, columns=['Label','Text', 'Label_Start' , 'Label_End', 'Episode'] )
+        labels_text = pd.DataFrame(labels_text, columns=['label','text', 'label_start' , 'label_end', 'episode'] )
 
 
         return labels_text
