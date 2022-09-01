@@ -14,6 +14,8 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
+env = "dev" # ["dev", "prod"]
+
 if __name__ == '__main__':
 
     print(f"⚙️ Getting last available episode")
@@ -27,11 +29,10 @@ if __name__ == '__main__':
 
     print(f"⚙️ Preprocessing episode for {last_diffusion_date}")
 
-    preprocessed_audio = Audio(last_diffusion_date, last_diffusion_url)
+    preprocessed_audio = Audio(last_diffusion_date, last_diffusion_url, env)
     audio_path = preprocessed_audio.export_conversion(storage_dir)
 
     print(f"✅ Cleaned and stored episode for {last_diffusion_date}")
-    # print(audio_path)
 
     print(f"⚙️ Converting to text episode for {last_diffusion_date}")
 
