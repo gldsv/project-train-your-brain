@@ -6,16 +6,16 @@ import os
 class Audio:
     """A class for audio processing."""
 
-    def __init__(self, date: str, url: str):
+    def __init__(self, date: str, url: str, env: str):
         """Constructor for Audio class."""
 
         self.filename = date
         self.source_url = url
         #self.filepath = source
-        self.audio = self.load_source()
+        self.audio = self.load_source(env)
 
 
-    def load_source(self):
+    def load_source(self, env):
         """Load audio-source as AudioSegment."""
 
         audio_url = requests.get(self.source_url, allow_redirects=True)
@@ -29,9 +29,10 @@ class Audio:
         self.audio = self.audio.set_channels(1)
         self.audio = self.audio.set_frame_rate(16000)
 
-        self.audio = self.audio[180000:]
-        # self.audio = self.audio[:60000] # Test for dev
-        # self.audio = self.audio[240000:300000] # Test for dev
+        if env == "prod":
+            self.audio = self.audio[180000:]
+        if env == "dev":
+            self.audio = self.audio[300000:360000]
 
         return self.audio
 
