@@ -1,6 +1,7 @@
 from train_your_brain.data import GetData
 from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
+from train_your_brain.chunk_text import Chunk
 import os
 
 API_TOKEN = os.environ.get("API_TOKEN")
@@ -35,6 +36,17 @@ if __name__ == '__main__':
     print(f"⚙️ Converting to text episode for {last_diffusion_date}")
 
     retranscript = Retranscript(AZURE_TOKEN)
-    retranscript.speech_recognize_continuous_from_file(audio_path)
+    transcript_path = retranscript.speech_recognize_continuous_from_file(audio_path)
 
     print(f"✅ Converted to text episode for {last_diffusion_date}")
+
+    print(f"⚙️ Chunking text episode for {last_diffusion_date}")
+
+    with open(transcript_path) as f:
+        text = f.readlines()
+        text = text[0]
+
+    chunker = Chunk(text)
+    chunked_text = chunker.chunk_text()
+
+    print(f"✅ Text chunked for episode for {last_diffusion_date}")

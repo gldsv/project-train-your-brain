@@ -61,3 +61,5 @@ class Retranscript:
 
         file = open(transcript_path,'w')
         file.write(result)
+
+        return transcript_path
