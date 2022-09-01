@@ -32,7 +32,7 @@ class Audio:
         if env == "prod":
             self.audio = self.audio[180000:]
         if env == "dev":
-            self.audio = self.audio[300000:360000]
+            self.audio = self.audio[300000:420000]
 
         return self.audio
 

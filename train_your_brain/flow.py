@@ -62,7 +62,7 @@ def chunk_transcript(last_diffusion_date, transcript_path):
         text = f.readlines()
         text = text[0]
 
-    chunker = Chunk(text)
+    chunker = Chunk(text, last_diffusion_date)
     chunked_text = chunker.chunk_text()
 
     print(f"✅ Text chunked for episode for {last_diffusion_date}")

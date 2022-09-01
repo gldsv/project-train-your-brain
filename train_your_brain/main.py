@@ -2,7 +2,7 @@ from train_your_brain.data import GetData
 from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
 from train_your_brain.chunk_text import Chunk
-from train_your_brain.wip_flow import run_flow
+from train_your_brain.flow import run_flow
 import os
 
 API_TOKEN = os.environ.get("API_TOKEN")
@@ -15,9 +15,8 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
-env = "prod" # ["dev", "prod"]
+env = "dev" # ["dev", "prod"]
 
 
 if __name__ == "__main__":
-
     flow = run_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
