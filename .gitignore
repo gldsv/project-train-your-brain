@@ -7,3 +7,4 @@ notebooks/*
 export/*
 raw_data/*
 !raw_data/podcast_history.json
+*test.py

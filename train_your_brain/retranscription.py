@@ -1,5 +1,6 @@
 import azure.cognitiveservices.speech as speechsdk
 import time
+import os
 
 class Retranscript:
     """A class for converting audio to text"""
@@ -61,5 +62,7 @@ class Retranscript:
 
         file = open(transcript_path,'w')
         file.write(result)
+
+        os.remove(audio_path)
 
         return transcript_path
