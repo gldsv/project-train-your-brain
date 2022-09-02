@@ -13,13 +13,11 @@ class Tokenizor():
     def __init__(self, url:str, model = "camembert-base"):
         #load tokenizer from HF
         self.tokenizer = AutoTokenizer.from_pretrained(model)
-        self.baby_chunkator = CreateChunk(self.tokenizer,512)
-        # Call Function url = '/Users/laurene.merite/code/laurene-merite-wagon/project-train-your-brain/exchange'
+        # Call Function
         self.url = url
         self.labelled = LabelledData(self.url)
         self.output , self.raw_text , self.nb_episode = self.labelled.extract_labels_from_json()
         self.labels_json=json.loads(self.output.to_json(force_ascii=False,orient='records'))
-        #self.res = self.tokenizor(self.labels_json,self.tokenizer)
         self.mapping = {
             "B-Annonce_Question":0,
             "I-Annonce_Question":1,
@@ -76,21 +74,6 @@ class Tokenizor():
         return json_traité
 
 
-    def chunkator(self,sample_full, chunk_mapping_list, baby_chunkator):
-        #res = self.tokenizor(self.labels_json,self.tokenizer)
-        sample_full_df = pd.DataFrame(sample_full).sort_values('label_start').reset_index()
-        chunks = []
-        for i,chunk in enumerate(chunk_mapping_list):
-            if i<len(chunk_mapping_list)-1:
-                sample_extract = sample_full_df[sample_full_df['label_start']<chunk['chunk_end']].copy()
-            else:
-                sample_extract = sample_full_df
-            sample_extract['chunk_id']=chunk['chunk_id']
-            sample_full_df=sample_full_df.drop(sample_extract.index)
-            chunk = self.baby_chunkator(sample_extract.to_dict(orient='records'))
-            chunks.append(chunk)
-        return pd.DataFrame(chunks)
-
     def labelled_data_extract(self):
         storage = []
         final_result = []
@@ -102,9 +85,7 @@ class Tokenizor():
             labels_json=json.loads(output_.to_json(force_ascii=False,orient='records'))
             res = self.tokenizor(labels_json,self.tokenizer)
             chunk_mapping_list=episode[1]
-            storage.append(self.chunkator(sample_full=res,
-                                    chunk_mapping_list=chunk_mapping_list,
-                                    baby_chunkator=self.baby_chunkator))
+            storage.append(CreateChunk(self.tokenizer ,512).__call__(sample_full=res,chunk_mapping_list=chunk_mapping_list))
         df=pd.concat(storage)
         return df
 
@@ -114,4 +95,5 @@ if __name__ == "__main__":
     tmp = Tokenizor( url=url)
     df = tmp.labelled_data_extract()
     df.to_csv(f"{url}/label_tokenized.csv")
+    df.to_json(f'{url}/label_tokenized.json',force_ascii=False,orient='records')
     print(f"✅ Labellised data chunked and tokenized ")
