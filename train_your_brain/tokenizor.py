@@ -1,5 +1,6 @@
 import re
 import json
+import os
 import pandas as pd
 from transformers import AutoTokenizer
 from chunk_text import Chunk
@@ -9,7 +10,7 @@ from create_chunk import CreateChunk
 
 class Tokenizor():
 
-    def __init__(self, model : "camembert-base", url:str):
+    def __init__(self, url:str, model = "camembert-base"):
         #load tokenizer from HF
         self.tokenizer = AutoTokenizer.from_pretrained(model)
         self.baby_chunkator = CreateChunk(self.tokenizer,512)
@@ -106,3 +107,11 @@ class Tokenizor():
                                     baby_chunkator=self.baby_chunkator))
         df=pd.concat(storage)
         return df
+
+
+if __name__ == "__main__":
+    url = os.path.join('./exchange')
+    tmp = Tokenizor( url=url)
+    df = tmp.labelled_data_extract()
+    df.to_csv(f"{url}/label_tokenized.csv")
+    print(f"✅ Labellised data chunked and tokenized ")
