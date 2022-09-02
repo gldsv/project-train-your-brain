@@ -2,7 +2,7 @@ from train_your_brain.data import GetData
 from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
 from train_your_brain.chunk_text import Chunk
-from prefect import task, Flow, flow
+from prefect import task, Flow
 
 
 @task
@@ -64,15 +64,19 @@ def chunk_transcript(last_diffusion_date, transcript_path):
     chunked_text_df = chunker.chunk_text()
     chunked_text_dict = chunker.chunk_dict()
 
+    # print(chunked_text_dict)
+
     print(f"✅ Text chunked for episode for {last_diffusion_date}")
 
     return chunked_text_df, chunked_text_dict
 
 
-@flow
-def run_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir):
-    last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
-    audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir)
-    transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path)
-    chunked_text = chunk_transcript(last_diffusion_info["date"], transcript_path)
-    print(chunked_text)
+def build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir):
+
+    with Flow(name="my_test") as flow:
+        last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
+        audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir)
+        transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path)
+        chunked_text = chunk_transcript(last_diffusion_info["date"], transcript_path)
+
+    return flow
