@@ -12,6 +12,8 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
+project_name = os.environ.get("PREFECT_PROJECT_NAME")
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
 args = parser.parse_args()
@@ -26,3 +28,4 @@ if __name__ == "__main__":
 
     flow = build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
+    flow.register(project_name)
