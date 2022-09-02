@@ -1,8 +1,5 @@
-from train_your_brain.data import GetData
-from train_your_brain.preproc_audio import Audio
-from train_your_brain.retranscription import Retranscript
-from train_your_brain.chunk_text import Chunk
 from train_your_brain.flow import build_flow
+import argparse
 import os
 
 API_TOKEN = os.environ.get("API_TOKEN")
@@ -15,9 +12,17 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
-env = "prod" # ["dev", "prod"]
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
+args = parser.parse_args()
 
 
 if __name__ == "__main__":
+
+    if args.dev:
+        env = "dev"
+    else:
+        env = "prod"
+
     flow = build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
