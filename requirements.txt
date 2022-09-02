@@ -91,6 +91,7 @@ jedi==0.18.1
 Jinja2==3.1.2
 jmespath==0.10.0
 joblib==1.1.0
+json
 json5==0.9.10
 jsonpatch==1.32
 jsonpointer==2.3
@@ -127,6 +128,7 @@ numpy==1.23.2
 oauthlib==3.2.0
 openapi-codec==1.3.2
 ordered-set==4.0.2
+os
 packaging==21.3
 pandas==1.3.5
 pandocfilters==1.5.0

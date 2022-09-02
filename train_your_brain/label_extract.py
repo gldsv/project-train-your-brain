@@ -16,7 +16,7 @@ class LabelledData:
 
         #get list of all json in folder
         path_to_json =  self.source_url
-        json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json') & pos_json.startswith('from') ]
+        json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')& pos_json.startswith('from') ]
 
         #load all json and store json data in a list
         all_data_json = []
@@ -34,6 +34,7 @@ class LabelledData:
         #Empty list for data storage and variable for number of episode QC
         labels_text = []
         nb_episode = 0
+        all_raw_text = []
 
         # Get data from json with load_json function
         all_data_json = self.load_json()
@@ -46,7 +47,7 @@ class LabelledData:
             # One json file could contains several episode - Iteration to have each episode
             for episode in data_several :
                 data_label = episode['label'] # All labeled data
-                data_id = episode['id'] # Date of the episode
+                data_id = int(episode['id']) # Date of the episode
                 raw_text = episode['text'] # Raw text for non labelled text extarction
                 nb_episode += 1
 
@@ -87,27 +88,20 @@ class LabelledData:
                     labels_text.append(['Blabla', raw_text[start:end],start,end,data_id])
                     labels_text.append(['Episode End', '','','',data_id])
 
+                # Stcok raw Text
+                all_raw_text.append([raw_text,data_id])
 
         #Transform list in DataFrame
         labels_text = pd.DataFrame(labels_text, columns=['label','text', 'label_start' , 'label_end', 'episode'] )
 
 
-        return labels_text
+
+        return labels_text,  all_raw_text, nb_episode
 
     def preprocessed_label_to_json(self) :
-        """Export pd.DataFrame into json format"""
-        url =  self.source_url
-
-        #Retrieve pd.DataFrame from extract_labels_from_json() function
+        #Retriev pd.DataFrame
         df = self.extract_labels_from_json()
         date_start = df['episode'].min()
         date_end = df['episode'].max()
-
         #Extart pd.DataFrame to JSON
-        df.to_json(f'{url}/label_preprocessed_export_from_{date_start}_to_{date_end}.json',force_ascii=False,orient='records')
-
-# To call function
-#url = '/Users/claire/code/gldsv/project-train-your-brain/exchange'
-#labelled = LabelledData(url)
-#output = labelled.extract_labels_from_json() #Get Dataframe
-#
+        df.to_json(f'{self.source_url}/label_preprocessed_export_from_{date_start}_to_{date_end}.json',force_ascii=False,orient='records')
