@@ -15,7 +15,7 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
-env = "dev" # ["dev", "prod"]
+env = "prod" # ["dev", "prod"]
 
 
 if __name__ == "__main__":
