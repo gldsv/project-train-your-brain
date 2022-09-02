@@ -12,7 +12,6 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
 args = parser.parse_args()
