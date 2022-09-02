@@ -206,6 +206,7 @@ tomlkit==0.11.4
 tornado==6.2
 tqdm==4.64.0
 traitlets==5.3.0
+transformers
 typer==0.6.1
 typing_extensions==4.3.0
 ua-parser==0.16.1
