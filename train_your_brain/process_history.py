@@ -10,8 +10,6 @@ history_path = "./raw_data/podcast_history_2.csv"
 history = pd.read_csv(history_path)
 history_range = history["date"].values.tolist()
 
-history_range = history_range[14:]
-
 
 if __name__ == "__main__":
     for date in history_range:
