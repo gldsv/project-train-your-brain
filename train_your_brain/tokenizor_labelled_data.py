@@ -91,9 +91,23 @@ class Tokenizor():
 
 
 if __name__ == "__main__":
-    url = os.path.join('./exchange')
-    tmp = Tokenizor( url=url)
-    df = tmp.labelled_data_extract()
-    df.to_csv(f"{url}/label_tokenized.csv")
-    df.to_json(f'{url}/label_tokenized.json',force_ascii=False,orient='records')
-    print(f"✅ Labellised data chunked and tokenized ")
+    #url = os.path.join('./exchange')
+    #tmp = Tokenizor( url=url)
+    #df = tmp.labelled_data_extract()
+    #json_files_train ,  json_files_test , json_files_all = LabelledData(url).get_json_list()
+    #df.to_csv(f"{url}/label_tokenized.csv")
+    #df.to_json(f'{url}/label_tokenized.json',force_ascii=False,orient='records')
+    #print(f"✅ Labellised data chunked and tokenized ")
+    #print(f"ℹ️ Json List for Train : {json_files_train}")
+    #print(f"ℹ️ Json List for Test : {json_files_test}")
+
+    to_preprocess = ['train_data', 'test_data']
+    for i in to_preprocess :
+        url = os.path.join(f'./exchange/{i}')
+        tmp = Tokenizor( url=url)
+        df = tmp.labelled_data_extract()
+        json_files_list = LabelledData(url).get_json_list()
+        df.to_csv(f"{url}/label_{i}_tokenized.csv")
+        df.to_json(f'{url}/label_{i}_tokenized.json',force_ascii=False,orient='records')
+        print(f"✅ Labellised {i}, chunked and tokenized ")
+        print(f"ℹ️ Json List for {i} : {json_files_list}")
