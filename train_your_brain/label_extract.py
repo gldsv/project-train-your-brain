@@ -99,9 +99,22 @@ class LabelledData:
         return labels_text,  all_raw_text, nb_episode
 
     def preprocessed_label_to_json(self) :
+        """Export preprocessed label data in json """
         #Retriev pd.DataFrame
         df = self.extract_labels_from_json()
         date_start = df['episode'].min()
         date_end = df['episode'].max()
         #Extart pd.DataFrame to JSON
-        df.to_json(f'{self.source_url}/label_preprocessed_export_from_{date_start}_to_{date_end}.json',force_ascii=False,orient='records')
+        json_file = df.to_json(f'{self.source_url}/label_preprocessed_export_from_{date_start}_to_{date_end}.json',force_ascii=False,orient='records')
+
+        return json_file
+
+
+    def get_json_list(self) :
+        """Return list of files preprocessed """
+        url = self.source_url
+        json_files_train = [pos_json for pos_json in os.listdir(url) if pos_json.endswith('train.json')& pos_json.startswith('from') ]
+        json_files_test = [pos_json for pos_json in os.listdir(url) if pos_json.endswith('test.json')& pos_json.startswith('from') ]
+        json_files_all = [pos_json for pos_json in os.listdir(url) if pos_json.endswith('.json')& pos_json.startswith('from') ]
+
+        return json_files_train ,  json_files_test , json_files_all
