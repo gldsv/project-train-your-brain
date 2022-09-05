@@ -1,0 +1,76 @@
+.column {
+  float: left;
+  width: 50%;
+  /*margin-top:10px;*/
+  border-right: 2px dotted black;
+  text-align: justify;
+}
+
+.column:first-child {
+  padding-right: 16px;
+  padding-left: 0px;
+}
+
+.column:last-child {
+  padding-right: 0px;
+  padding-left: 15px;
+  border: none;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  text-align: left
+}
+
+.title {
+  text-align: center;
+  padding-bottom: 15px;
+  padding-top: 0;
+  margin-top: 0;
+  border-bottom: 2px dotted black
+}
+
+
+div.content>* {
+  text-align: center;
+  font-weight: bold;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0px auto;
+  margin-bottom: 5p;
+  background: #FFFFFF;
+  padding-block: 10px;
+  max-width: auto;
+  border: 2px solid black;
+}
+
+/*styles for each label*/
+
+Annonce_Question {
+  background-color: #ff8585;
+}
+
+Question {
+  background-color: #7cf0ff;
+}
+
+Bonne_Reponse {
+  background-color: #badcfc;
+}
+
+Confirmation_Reponse {
+  background-color: #3a3dff;
+}
+
+Mauvaise_Reponse {
+  background-color: #ff7df9;
+}
