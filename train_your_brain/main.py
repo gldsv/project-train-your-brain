@@ -1,4 +1,5 @@
 from train_your_brain.flow import build_flow
+from datetime import datetime
 import argparse
 import os
 
@@ -18,6 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
 args = parser.parse_args()
 
+date_to_process = datetime.today().strftime('%Y%m%d')
 
 if __name__ == "__main__":
 
@@ -28,6 +30,6 @@ if __name__ == "__main__":
         env = "prod"
         print("🏢 PRODUCTION MODE")
 
-    flow = build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
+    flow = build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
     # flow.register(project_name)
