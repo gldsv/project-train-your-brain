@@ -39,12 +39,12 @@ def preprocess_audio(last_diffusion_date, last_diffusion_url, env, storage_dir):
 
 
 @task
-def transcript_audio(AZURE_TOKEN, last_diffusion_date, audio_path):
+def transcript_audio(AZURE_TOKEN, last_diffusion_date, audio_path, env):
 
     print(f"⚙️ Converting to text episode for {last_diffusion_date}")
 
     retranscript = Retranscript(AZURE_TOKEN)
-    transcript_path = retranscript.speech_recognize_continuous_from_file(audio_path)
+    transcript_path = retranscript.speech_recognize_continuous_from_file(audio_path, env)
 
     print(f"✅ Converted to text episode for {last_diffusion_date}")
 
@@ -76,7 +76,7 @@ def build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, en
     with Flow(name="my_test") as flow:
         last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
         audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir)
-        transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path)
+        transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env)
         chunked_text = chunk_transcript(last_diffusion_info["date"], transcript_path)
 
     return flow
