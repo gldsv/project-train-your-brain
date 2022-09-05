@@ -19,8 +19,8 @@ class Tokenizor():
         self.output , self.raw_text , self.nb_episode = self.labelled.extract_labels_from_json()
         self.labels_json=json.loads(self.output.to_json(force_ascii=False,orient='records'))
         self.mapping = {
-            "B-Annonce_Question":0,
-            "I-Annonce_Question":1,
+            "B-Annonce_Question":1,
+            "I-Annonce_Question":2,
             "B-Question":3,
             "I-Question":4,
             "B-Bonne_Reponse":5,
@@ -60,7 +60,7 @@ class Tokenizor():
             j['labels'] = j['label'].replace(' ','_')
             j['labels_matched'] = []
             for i,w in enumerate(word_ids):
-                if w==None or w==word_ids[i-1]:
+                if w==None: #or w==word_ids[i-1]:
                     j['labels_matched'].append(0)
                     continue
                 else:
