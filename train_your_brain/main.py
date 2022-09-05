@@ -30,6 +30,7 @@ if __name__ == "__main__":
         env = "prod"
         print("🏢 PRODUCTION MODE")
 
+    print(f"ℹ️ Processing for date {date_to_process}")
     flow = build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
     # flow.register(project_name)
