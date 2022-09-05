@@ -2,6 +2,7 @@ from train_your_brain.data import GetData
 from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
 from train_your_brain.chunk_text import Chunk
+from train_your_brain.tokenizor_predict_data import Tokenizor_prediction
 from prefect import task, Flow
 import os.path
 
@@ -70,6 +71,22 @@ def chunk_transcript(last_diffusion_date, transcript_path):
 
     return chunked_text_df, chunked_text_dict
 
+@task
+def chunk_prediction_tokenizer(transcript_path, last_diffusion_date,chunked_text ):
+
+    print(f"⚙️ Tokenizing chunck episode for {last_diffusion_date}")
+
+    transcript_file = f'{last_diffusion_date}.txt'
+    tokenizer = Tokenizor_prediction(transcript_path, transcript_file, chunked_text)
+    df_token_prediction = tokenizer.prediction_data_extract()
+    csv_token_prediction = df_token_prediction.to_csv(f"{transcript_path}_to_predict_tokenized.csv")
+
+    # print(df_token_prediction)
+
+    print(f"✅ Chuncked Episode tonkenized for {last_diffusion_date}")
+
+    return csv_token_prediction , df_token_prediction
+
 
 def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir):
 
@@ -82,5 +99,6 @@ def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, numb
             audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
             transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
         chunked_text = chunk_transcript(date_to_process, transcript_path)
-
+        tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
+    
     return flow
