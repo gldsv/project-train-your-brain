@@ -23,9 +23,11 @@ if __name__ == "__main__":
 
     if args.dev:
         env = "dev"
+        print("🏗️ DEVELOPMENT MODE")
     else:
         env = "prod"
+        print("🏢 PRODUCTION MODE")
 
     flow = build_flow(API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
-    flow.register(project_name)
+    # flow.register(project_name)

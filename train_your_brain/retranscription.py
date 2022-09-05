@@ -11,7 +11,7 @@ class Retranscript:
         self.token = token
 
 
-    def speech_recognize_continuous_from_file(self, audio_path:str):
+    def speech_recognize_continuous_from_file(self, audio_path:str, env:str):
         """performs continuous speech recognition with input from an audio file"""
 
         # <SpeechContinuousRecognitionWithFile>
@@ -58,7 +58,7 @@ class Retranscript:
         #print(all_results)
         result = " ".join(all_results)
 
-        transcript_path = f"{audio_path[:-4]}.txt"
+        transcript_path = f"{audio_path[:-4]}_{env}.txt"
 
         file = open(transcript_path,'w')
         file.write(result)
