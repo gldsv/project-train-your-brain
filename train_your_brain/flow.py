@@ -79,7 +79,7 @@ def chunk_prediction_tokenizer(transcript_path, last_diffusion_date,chunked_text
     transcript_file = f'{last_diffusion_date}.txt'
     tokenizer = Tokenizor_prediction(transcript_path, transcript_file, chunked_text)
     df_token_prediction = tokenizer.prediction_data_extract()
-    csv_token_prediction = df_token_prediction.to_csv(f"{transcript_path}_to_predict_tokenized.csv")
+    csv_token_prediction = df_token_prediction.to_csv(f"{transcript_path[:-4]}_to_predict_tokenized.csv")
 
     # print(df_token_prediction)
 
