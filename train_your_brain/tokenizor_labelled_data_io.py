@@ -25,10 +25,10 @@ class Tokenizor_io():
             "I-Question":2,
             #"B-Bonne_Reponse":3,
             "I-Bonne_Reponse":3,
-            #"B-Confirmation_Reponse":4,
-            "I-Confirmation_Reponse":4,
-            #"B-Mauvaise_Reponse":5,
-            "I-Mauvaise_Reponse":5,
+            #"B-Confirmation_Reponse":3,
+            "I-Confirmation_Reponse":3,
+            #"B-Mauvaise_Reponse":4,
+            "I-Mauvaise_Reponse":4,
             #"B-To_delete":0,
             "I-To_delete":0,
             #"B-Blabla":0,
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         tmp = Tokenizor_io( url=url)
         df = tmp.labelled_data_extract()
         json_files_list = LabelledData(url).get_json_list()
-        df.to_csv(f"{url}/label_{i}_tokenized_io.csv")
-        df.to_json(f'{url}/label_{i}_tokenized_io.json',force_ascii=False,orient='records')
+        df.to_csv(f"{url}/label_{i}_tokenized_io_new.csv")
+        df.to_json(f'{url}/label_{i}_tokenized_io_new.json',force_ascii=False,orient='records')
         print(f"✅ Labellised {i}, chunked and tokenized ")
         print(f"ℹ️ Json List for {i} : {json_files_list}")
