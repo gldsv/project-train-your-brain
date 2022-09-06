@@ -28,9 +28,11 @@ SCHEDULE_HOUR = 14
 
 if now_hour >= SCHEDULE_HOUR:
     date_to_process = now.strftime('%Y%m%d')
+    msg = f"ℹ️ We're after {SCHEDULE_HOUR} h, processing for date {date_to_process}"
 else:
     date_to_process = now - timedelta(1)
     date_to_process = date_to_process.strftime('%Y%m%d')
+    msg = f"ℹ️ We're before {SCHEDULE_HOUR} h, processing for date {date_to_process}"
 
 
 if __name__ == "__main__":
@@ -42,7 +44,7 @@ if __name__ == "__main__":
         env = "prod"
         print("🏢 PRODUCTION MODE")
 
-    print(f"ℹ️ We're before {SCHEDULE_HOUR} h, processing for date {date_to_process}")
+    print(msg)
     flow = build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
     # flow.register(project_name)
