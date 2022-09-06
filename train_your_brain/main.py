@@ -19,6 +19,7 @@ project_name = os.environ.get("PREFECT_PROJECT_NAME")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
+parser.add_argument("-u", "--update", help = "If specified, register flow for update", action = "store_true")
 args = parser.parse_args()
 
 
@@ -44,7 +45,11 @@ if __name__ == "__main__":
         env = "prod"
         print("🏢 PRODUCTION MODE")
 
-    print(msg)
     flow = build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
-    flow.run()
-    # flow.register(project_name)
+
+    if args.update:
+        flow.register(project_name)
+        print("⬆️ Flow registration updated")
+    else:
+        print(msg)
+        flow.run()
