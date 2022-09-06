@@ -94,7 +94,7 @@ def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, numb
         if os.path.exists(os.path.join(storage_dir, f"{date_to_process}_{env}.txt")): # If transcript already exists, jump API, audiopreproc and transcript steps
             transcript_path = os.path.join(storage_dir, f"{date_to_process}_{env}.txt")
             print(f"✅ Already transcripted for episode for {date_to_process}")
-        else:
+        else: # Download episode
             last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
             audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
             transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt

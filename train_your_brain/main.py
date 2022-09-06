@@ -1,5 +1,5 @@
 from train_your_brain.flow import build_flow
-from datetime import datetime
+from datetime import datetime, timedelta
 import argparse
 import os
 
@@ -13,13 +13,27 @@ storage_dir = './raw_data'
 filename = 'podcast_history.csv'
 history_path = os.path.join(storage_dir, filename)
 
+
 project_name = os.environ.get("PREFECT_PROJECT_NAME")
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dev", help = "If specified, set dev mode for quicker flow", action = "store_true")
 args = parser.parse_args()
 
-date_to_process = datetime.today().strftime('%Y%m%d')
+
+now = datetime.today()
+now_hour = now.hour
+SCHEDULE_HOUR = 14
+
+if now_hour >= SCHEDULE_HOUR:
+    date_to_process = now.strftime('%Y%m%d')
+    msg = f"ℹ️ We're after {SCHEDULE_HOUR} h, processing for date {date_to_process}"
+else:
+    date_to_process = now - timedelta(1)
+    date_to_process = date_to_process.strftime('%Y%m%d')
+    msg = f"ℹ️ We're before {SCHEDULE_HOUR} h, processing for date {date_to_process}"
+
 
 if __name__ == "__main__":
 
@@ -30,7 +44,7 @@ if __name__ == "__main__":
         env = "prod"
         print("🏢 PRODUCTION MODE")
 
-    print(f"ℹ️ Processing for date {date_to_process}")
+    print(msg)
     flow = build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir)
     flow.run()
     # flow.register(project_name)
