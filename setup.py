@@ -1,13 +1,11 @@
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import setup, find_packages
 
-with open("requirements.txt") as f:
-    content = f.readlines()
-requirements = [x.strip() for x in content if "git+" not in x]
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
 
-setup(name='train_your_brain',
-      version="0.0.1",
-      description="Train your Brain project",
-      install_requires=requirements,
-      packages=find_packages()
+setup(
+    name="train_your_brain",
+    version='0.0.1',
+    packages=find_packages(),
+    install_requires=requirements
 )
