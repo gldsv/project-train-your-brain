@@ -107,6 +107,6 @@ def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, numb
             transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
         chunked_text = chunk_transcript(date_to_process, transcript_path)
         tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
-        y_pred = prediction(tokenized_text)
+        y_pred = prediction(tokenized_text[1])
 
     return flow
