@@ -36,7 +36,7 @@ def load_weights(model):
 
     return model
 
-def pred(X_pred):
+def pred(X_pred, date_pred):
     model = initialize_model()
     model = compile_model(model)
     model = load_weights(model)
@@ -48,7 +48,7 @@ def pred(X_pred):
 
     print("\n ⭐️ pred done")
 
-    with open('./model/printed_pred.npy', 'wb') as f:
+    with open(f'./model/pred_{date_pred}.npy', 'wb') as f:
         np.save(f, pred)
 
     return y_pred
