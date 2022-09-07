@@ -98,15 +98,18 @@ def prediction(X_pred):
 def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir):
 
     with Flow(name="my_test") as flow:
-        if os.path.exists(os.path.join(storage_dir, f"{date_to_process}_{env}.txt")): # If transcript already exists, jump API, audiopreproc and transcript steps
-            transcript_path = os.path.join(storage_dir, f"{date_to_process}_{env}.txt")
-            print(f"✅ Already transcripted for episode for {date_to_process}")
-        else: # Download episode
-            last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
-            audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
-            transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
-        chunked_text = chunk_transcript(date_to_process, transcript_path)
-        tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
-        y_pred = prediction(tokenized_text[1])
+        if os.path.exists("./model/printed_pred.npy"):
+            print(f"✅ Already predicted {date_to_process}, please proceed")
+        else:
+            if os.path.exists(os.path.join(storage_dir, f"{date_to_process}_{env}.txt")): # If transcript already exists, jump API, audiopreproc and transcript steps
+                transcript_path = os.path.join(storage_dir, f"{date_to_process}_{env}.txt")
+                print(f"✅ Already transcripted for episode for {date_to_process}")
+            else: # Download episode
+                last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
+                audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
+                transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
+            chunked_text = chunk_transcript(date_to_process, transcript_path)
+            tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
+            y_pred = prediction(tokenized_text[1])
 
     return flow
