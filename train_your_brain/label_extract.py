@@ -46,6 +46,20 @@ class LabelledData:
 
             # One json file could contains several episode - Iteration to have each episode
             for episode in data_several :
+                #Order Label by characters numbers
+                tmp_start = []
+                for label in episode['label'] :
+                    first_label_start = label['start']
+                    tmp_start.append(first_label_start)
+                tmp_start = sorted(tmp_start)
+                tmp_list = []
+
+                for i in tmp_start :
+                    for label in episode['label'] :
+                        if i == label['start'] :
+                            tmp_list.append(label)
+                episode['label'] = tmp_list
+
                 data_label = episode['label'] # All labeled data
                 data_id = int(episode['id']) # Date of the episode
                 raw_text = episode['text'] # Raw text for non labelled text extarction
@@ -101,7 +115,7 @@ class LabelledData:
     def preprocessed_label_to_json(self) :
         """Export preprocessed label data in json """
         #Retriev pd.DataFrame
-        df = self.extract_labels_from_json()
+        df = self.extract_labels_from_json()[0]
         date_start = df['episode'].min()
         date_end = df['episode'].max()
         #Extart pd.DataFrame to JSON
