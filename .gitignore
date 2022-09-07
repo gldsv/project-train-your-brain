@@ -10,3 +10,4 @@ raw_data/*
 *test.py
 *.egg-info/
 build/
+*.h5
