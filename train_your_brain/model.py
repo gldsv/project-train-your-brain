@@ -2,7 +2,10 @@ from transformers import TFAutoModel
 import tensorflow as tf
 import pandas as pd
 import numpy as np
-# from keras.models import load_weights
+from google.cloud import storage
+import os
+
+weights_file_name = "model_weights.h5"
 
 def initialize_model():
 
@@ -15,7 +18,7 @@ def initialize_model():
 
     model = tf.keras.Model(inputs={'input_ids':input_ids,'attention_mask':attention_mask},outputs=outputs)
 
-    print("\n ✅ model initialized")
+    print("✅ model initialized")
 
     return model
 
@@ -24,17 +27,32 @@ def compile_model(model):
     adam = tf.keras.optimizers.Adam(learning_rate=0.001)
     model.compile(loss='sparse_categorical_crossentropy', optimizer=adam)
 
-    print("\n ✅ model compiled")
+    print("✅ model compiled")
 
     return model
+
+
+def download_weights_from_cloud():
+    bucket = os.environ.get("BUCKET")
+    file_path = f"model_weights/{weights_file_name}"
+    client = storage.Client()
+    bucket = client.bucket(bucket)
+    blob = bucket.blob(file_path)
+
+    print("⚙️ Downloading weights from Cloud Storage bucket")
+
+    blob.download_to_filename(f"./model/{weights_file_name}_test")
+
+    print("✅ Weights downloaded from Cloud Storage bucket")
 
 
 def load_weights(model):
-    model.load_weights("./model/model_weights.h5")
+    model.load_weights(f"./model/{weights_file_name}")
 
-    print("\n ✅ weights loaded")
+    print("✅ weights loaded")
 
     return model
+
 
 def pred(X_pred, date_pred):
     model = initialize_model()
@@ -46,9 +64,12 @@ def pred(X_pred, date_pred):
 
     y_pred = model.predict({"input_ids":input_ids,"attention_mask":attention_mask})
 
-    print("\n ⭐️ pred done")
+    print("⭐️ pred done")
 
     with open(f'./model/pred_{date_pred}.npy', 'wb') as f:
         np.save(f, pred)
 
     return y_pred
+
+if __name__ == "__main__":
+    download_weights_from_cloud()
