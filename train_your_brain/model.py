@@ -67,8 +67,7 @@ def pred(X_pred, date_pred):
     print("⭐️ pred done")
 
     with open(f'./model/pred_{date_pred}.npy', 'wb') as f:
-        np.save(f, pred)
-
+        np.save(f, y_pred)
     return y_pred
 
 if __name__ == "__main__":

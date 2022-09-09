@@ -85,7 +85,7 @@ class Tokenizor():
             labels_json=json.loads(output_.to_json(force_ascii=False,orient='records'))
             res = self.tokenizor(labels_json,self.tokenizer)
             chunk_mapping_list=episode[1]
-            storage.append(CreateChunk(self.tokenizer ,512).labelled_data_token_output(sample_full=res,chunk_mapping_list=chunk_mapping_list))
+            storage.append(CreateChunk(self.tokenizer ,512).__call__(sample_full=res,chunk_mapping_list=chunk_mapping_list))
         df=pd.concat(storage)
         return df
 

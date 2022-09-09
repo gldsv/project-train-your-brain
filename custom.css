@@ -50,27 +50,27 @@ div.content>* {
   background: #FFFFFF;
   padding-block: 10px;
   max-width: auto;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 
 /*styles for each label*/
 
 Annonce_Question {
-  background-color: #ff8585;
+  background-color: #FCE0C0;
 }
 
 Question {
-  background-color: #7cf0ff;
+  background-color: #8CE3F5;
 }
 
 Bonne_Reponse {
-  background-color: #3a3dff;
+  background-color: #A9FFA5;
 }
 
 Confirmation_Reponse {
-  background-color: #3a3dff;
+  background-color: #A9FFA5;
 }
 
 Mauvaise_Reponse {
-  background-color: #ff7df9;
+  background-color: #F5ADAA;
 }
