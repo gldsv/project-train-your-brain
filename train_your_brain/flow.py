@@ -3,8 +3,10 @@ from train_your_brain.preproc_audio import Audio
 from train_your_brain.retranscription import Retranscript
 from train_your_brain.chunk_text import Chunk
 from train_your_brain.tokenizor_predict_data import Tokenizor_prediction
+from train_your_brain.postproc import Postproc
 from train_your_brain.model import pred
 from prefect import task, Flow
+import pandas as pd
 import os.path
 
 @task
@@ -81,12 +83,13 @@ def chunk_prediction_tokenizer(transcript_path, last_diffusion_date,chunked_text
     tokenizer = Tokenizor_prediction(transcript_path, transcript_file, chunked_text)
     df_token_prediction = tokenizer.prediction_data_extract()
     csv_token_prediction = df_token_prediction.to_csv(f"{transcript_path[:-4]}_to_predict_tokenized.csv")
+    json_token_prediction = df_token_prediction.to_json(f"{transcript_path[:-4]}_to_predict_tokenized.json",force_ascii=False,orient='records')
 
     # print(df_token_prediction)
 
     print(f"✅ Chuncked Episode tonkenized for {last_diffusion_date}")
 
-    return csv_token_prediction , df_token_prediction
+    return csv_token_prediction , df_token_prediction, json_token_prediction
 
 @task
 def prediction(X_pred, date_pred):
@@ -94,22 +97,35 @@ def prediction(X_pred, date_pred):
 
     return y_pred
 
+@task
+def postproc(text,df,y_pred,date_to_process):
+    """Merge the transcript with the predictions and export the result into a csv"""
+    initialisation = Postproc(text, df, y_pred)
+    prediction_aggregation = initialisation.aggregation_predicator()
+    text_predicted = prediction_aggregation.postprepoc_df()
+    text_predicted.to_csv(f"./result/postprocessed_data_{date_to_process}.csv")
+
+    print(f"✅ Postprocessed episode \n \n \n \n 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀   ALL DONE    🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 \n \n \n \n")
 
 def build_flow(date_to_process, API_TOKEN, AZURE_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions, env, storage_dir):
 
     with Flow(name="my_test") as flow:
+        if os.path.exists(os.path.join(storage_dir, f"{date_to_process}_{env}.txt")): # If transcript already exists, jump API, audiopreproc and transcript steps
+            transcript_path = os.path.join(storage_dir, f"{date_to_process}_{env}.txt")
+            print(f"✅ Already transcripted for episode for {date_to_process}")
+        else: # Download episode
+            last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
+            audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
+            transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
+        chunked_text = chunk_transcript(date_to_process, transcript_path)
+        tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
         if os.path.exists(f'./model/pred_{date_to_process}.npy'):
-            print(f"✅ Already predicted {date_to_process}, please proceed")
+            pass
         else:
-            if os.path.exists(os.path.join(storage_dir, f"{date_to_process}_{env}.txt")): # If transcript already exists, jump API, audiopreproc and transcript steps
-                transcript_path = os.path.join(storage_dir, f"{date_to_process}_{env}.txt")
-                print(f"✅ Already transcripted for episode for {date_to_process}")
-            else: # Download episode
-                last_diffusion_info = get_data(API_TOKEN, JEU_MILLE_EUROS_ID, number_diffusions)
-                audio_path = preprocess_audio(last_diffusion_info["date"], last_diffusion_info["url"], env, storage_dir) # ./raw_data/20220905.wav
-                transcript_path = transcript_audio(AZURE_TOKEN, last_diffusion_info["date"], audio_path, env) # ./raw_data/20220905_prod.txt
-            chunked_text = chunk_transcript(date_to_process, transcript_path)
-            tokenized_text = chunk_prediction_tokenizer(transcript_path,date_to_process,chunked_text)
+            print(f"⏳ Making predictions")
             y_pred = prediction(tokenized_text[1], date_to_process)
-
+        print(f"✅ Predictions done")
+        y_pred = f'./model/pred_{date_to_process}.npy'
+        predict_data = pd.read_json(f"{transcript_path[:-4]}_to_predict_tokenized.json",orient='records',)
+        postproc(transcript_path,predict_data,y_pred,date_to_process)
     return flow
