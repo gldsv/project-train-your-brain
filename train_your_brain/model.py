@@ -41,7 +41,7 @@ def download_weights_from_cloud():
 
     print("⚙️ Downloading weights from Cloud Storage bucket")
 
-    blob.download_to_filename(f"./model/{weights_file_name}_test")
+    blob.download_to_filename(f"./model/{weights_file_name}")
 
     print("✅ Weights downloaded from Cloud Storage bucket")
 
